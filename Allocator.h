@@ -67,16 +67,34 @@ class Allocator {
         /**
          * O(1) in space
          * O(n) in time
-         * <your documentation>
+         * valid walks through a[] by going from sentinel to sentinel, making sure that sentinel pairs match
          */
         bool valid () const {
-            // <your code>
-            return true;}
+            
+			int current_position = 0;
+			int sentinel_value = view(current_position);
+			int abs_sentinel_value = (sentinel_value < 0 ? -sentinel_value : sentinel_value);
+			
+			while(current_position < N)
+			{				 
+				if(view(current_position + abs_sentinel_value + sizeof(int)) != sentinel_value)
+					return false;
+				
+				
+				current_position += abs_sentinel_value + (2*sizeof(int));
+				if(current_position == N)
+					return true;
+				
+				sentinel_value = view(current_position);
+				abs_sentinel_value = (sentinel_value < 0 ? -sentinel_value : sentinel_value);
+			}
+			
+            return false;}
 
         /**
          * O(1) in space
          * O(1) in time
-         * <your documentation>
+         * view allows you to interpret a[i] as an int for sentinels
          */
         int& view (int i) {
             return *reinterpret_cast<int*>(&a[i]);}
@@ -92,6 +110,15 @@ class Allocator {
          * throw a bad_alloc exception, if N is less than sizeof(T) + (2 * sizeof(int))
          */
         Allocator () {
+            
+			if(N < (sizeof(T) + 2*sizeof(int)) )
+				throw(std::bad_alloc());
+			
+            int sentinel_value = N - 8; // There are two sentinels of size 4, so the total usable space is N - 4 - 4, or N - 8
+            
+            view(0) = sentinel_value; // Set the first sentinel value
+            
+            view(N-4) = sentinel_value; // Set the last sentinel value
             
             assert(valid());
 		}
