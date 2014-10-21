@@ -92,8 +92,9 @@ class Allocator {
          * throw a bad_alloc exception, if N is less than sizeof(T) + (2 * sizeof(int))
          */
         Allocator () {
-            // <your code>
-            assert(valid());}
+            
+            assert(valid());
+		}
 
         // Default copy, destructor, and copy assignment
         // Allocator  (const Allocator&);

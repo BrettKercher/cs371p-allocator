@@ -28,7 +28,8 @@ struct TestAllocator : testing::Test {
     typedef          A                  allocator_type;
     typedef typename A::value_type      value_type;
     typedef typename A::difference_type difference_type;
-    typedef typename A::pointer         pointer;};
+    typedef typename A::pointer         pointer;
+};
 
 typedef testing::Types<
             std::allocator<int>,
@@ -71,15 +72,125 @@ TYPED_TEST(TestAllocator, Ten) {
         try {
             while (p != e) {
                 x.construct(p, v);
-                ++p;}}
+                ++p;
+			}
+		}
         catch (...) {
             while (b != p) {
                 --p;
-                x.destroy(p);}
+                x.destroy(p);
+			}
             x.deallocate(b, s);
-            throw;}
+            throw;
+		}
         ASSERT_EQ(s, std::count(b, e, v));
-        while (b != e) {
+        while (b != e) 
+		{
             --e;
-            x.destroy(e);}
-        x.deallocate(b, s);}}
+            x.destroy(e);
+		}
+        x.deallocate(b, s);
+	}
+}
+        
+/***********************
+*						*
+* 	Test My Allocator	* 
+*						*
+************************/
+
+
+struct my_struct
+{
+	int s_int;
+	double s_double;
+	bool s_bool;
+	my_struct* next;
+};
+        
+TEST(TestMyAllocator, test_constructor_1)
+{
+	bool pass;
+	try
+	{
+		Allocator<int, 11> x;
+		pass = false;
+	}
+	catch (const std::bad_alloc& e)
+	{
+		pass = true;
+	}
+	
+	ASSERT_EQ(pass, true);
+}
+
+TEST(TestMyAllocator, test_constructor_2)
+{
+	bool pass;
+	
+	try
+	{
+		Allocator<int, 12> x;
+		pass = true;
+	}
+	catch (const std::bad_alloc& e)
+	{
+		pass = false;
+	}
+	
+	ASSERT_EQ(pass, true);
+}
+
+TEST(TestMyAllocator, test_constructor_3)
+{
+	bool pass;
+	
+	try
+	{
+		Allocator<my_struct, sizeof(my_struct)> x;
+		pass = false;
+	}
+	catch (const std::bad_alloc& e)
+	{
+		pass = true;
+	}
+	
+	ASSERT_EQ(pass, true);
+}
+
+TEST(TestMyAllocator, test_constructor_4)
+{
+	bool pass;
+	
+	try
+	{
+		const Allocator<int, 20> x;
+		
+		ASSERT_EQ(x.view(0), 12);
+		
+		pass = true;
+	}
+	catch (const std::bad_alloc& e)
+	{
+		pass = false;
+	}
+	
+	ASSERT_EQ(pass, true);
+}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
