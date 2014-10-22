@@ -367,7 +367,7 @@ TEST(TestMyAllocator, test_deallocate_1)
 	}
 }
 
-TEST(TestMyAllocator, test_deallocate_3)
+TEST(TestMyAllocator, test_deallocate_2)
 {	
 	try
 	{
@@ -400,7 +400,7 @@ TEST(TestMyAllocator, test_deallocate_3)
 	}
 }
 
-TEST(TestMyAllocator, test_deallocate_4)
+TEST(TestMyAllocator, test_deallocate_3)
 {	
 	try
 	{
@@ -412,7 +412,6 @@ TEST(TestMyAllocator, test_deallocate_4)
 		
 		int* p1 = x.allocate(1);
 		int* p2 = x.allocate(1);
-		
 		
 		x.deallocate(p2, 1);
 		

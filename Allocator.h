@@ -85,6 +85,31 @@ class Allocator {
 			
 			return -1;
 		}
+		
+		
+		void coalesce(int* left_sentinel, int* right_sentinel)
+		{
+			
+			if((left_sentinel - 1) > (int*)a)
+			{
+				if( *(left_sentinel - 1) > 0)
+				{
+					*right_sentinel = *(left_sentinel - 1) + *left_sentinel + 2*sizeof(int);
+					*(reinterpret_cast<int*>(reinterpret_cast<char*>(right_sentinel) - (*right_sentinel) - sizeof(int))) = *right_sentinel;
+					
+					left_sentinel = (reinterpret_cast<int*>(reinterpret_cast<char*>(right_sentinel) - (*right_sentinel) - sizeof(int)));
+				}
+			}
+			
+			if((right_sentinel + 1) < (int*)(a + N))
+			{
+				if( *(right_sentinel + 1) > 0)
+				{
+					*left_sentinel = *(right_sentinel + 1) + *right_sentinel + 2*sizeof(int);
+					*(reinterpret_cast<int*>(reinterpret_cast<char*>(left_sentinel) + (*left_sentinel) + sizeof(int))) = *left_sentinel;
+				}
+			}
+		}
 
         // -----
         // valid
@@ -175,8 +200,7 @@ class Allocator {
 			int new_space;
 			int extra_space = 0;
 			int p = first_free(n * sizeof(T));
-            
-			//std::cout << p << " 0" << std::endl;
+			int first_element = p + sizeof(int);
 			
 			if(p < 0)
 				throw(std::bad_alloc());
@@ -184,26 +208,18 @@ class Allocator {
 			{
 				old_sentinel = view(p);
 				
-				//std::cout << old_sentinel << " 5" << std::endl;
 				
 				if((old_sentinel + 2*sizeof(int) - (n*sizeof(T))) < (sizeof(T) + 2*sizeof(int)))
 				{
 					extra_space = old_sentinel - n*sizeof(T);
-					//std::cout << extra_space << " 1" << std::endl;
 				}
 				
 				new_space = n*sizeof(T) + extra_space;
 				
-				//std::cout << new_space << " 5" << std::endl;
-				
 				view(p) = -(new_space);
 				view(p+sizeof(int)+new_space) = -(new_space);
 				
-				//std::cout << p+sizeof(int)+new_space << " 9" << std::endl;
-				
 				p = p+2*sizeof(int)+new_space;
-				
-				//std::cout << p << " > " << N << std::endl;
 				
 				if(p < N)
 				{
@@ -213,7 +229,8 @@ class Allocator {
 			}
 			
             assert(valid());
-            return 0;
+
+            return reinterpret_cast<T*>(&a[first_element]);
 		}
 
         // ---------
@@ -239,9 +256,30 @@ class Allocator {
          * after deallocation adjacent free blocks must be coalesced
          * <your documentation>
          */
-        void deallocate (pointer p, size_type) {
-            // <your code>
-            assert(valid());}
+        void deallocate (pointer p, size_type) 
+		{
+			int sentinel_value_1 = (int)*(reinterpret_cast<int*>(p) - 1);
+			
+			int sentinel_value_2 = *reinterpret_cast<int*>(reinterpret_cast<char*>(p) + (-sentinel_value_1) );
+			
+			if(sentinel_value_1 == sentinel_value_2)
+			{
+				if(sentinel_value_1 < 0)
+				{
+					*(reinterpret_cast<int*>(p) - 1) *= -1;
+				}
+				
+				if(sentinel_value_2 < 0)
+				{
+					*reinterpret_cast<int*>(reinterpret_cast<char*>(p) + (-sentinel_value_1) ) *= -1;
+				}
+			}
+			
+			
+			coalesce( (reinterpret_cast<int*>(p) - 1), reinterpret_cast<int*>(reinterpret_cast<char*>(p) + (-sentinel_value_1) ) );
+			
+            assert(valid());
+		}
 
         // -------
         // destroy
