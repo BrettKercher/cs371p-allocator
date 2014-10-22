@@ -429,7 +429,100 @@ TEST(TestMyAllocator, test_deallocate_3)
 		ASSERT_TRUE(false);
 	}
 }
-        
+
+TEST(TestMyAllocator, test_deallocate_4)
+{	
+	try
+	{
+		Allocator<int, 13> x;
+		const Allocator<int, 13>& y = x;
+		
+		ASSERT_EQ(y.view(0), 5);
+		ASSERT_EQ(y.view(9), 5);
+		
+		int* p = x.allocate(1);
+		
+		x.deallocate(p, 13);
+		
+		ASSERT_EQ(y.view(0), 5);
+		ASSERT_EQ(y.view(9), 5);
+	}
+	catch (const std::bad_alloc& e)
+	{
+		ASSERT_TRUE(false);
+	}
+}
+
+TEST(TestMyAllocator, fill)
+{	
+	try
+	{
+		Allocator<int, 100> x;
+		const Allocator<int, 100>& y = x;
+		
+		ASSERT_EQ(y.view(0), 92);
+		ASSERT_EQ(y.view(96), 92);
+		
+		int* p1 = x.allocate(2);
+		int* p2 = x.allocate(3);
+		int* p3 = x.allocate(5);
+		int* p4 = x.allocate(7);
+		
+		ASSERT_EQ(y.view(0), -8);
+		ASSERT_EQ(y.view(12), -8);
+		ASSERT_EQ(y.view(16), -12);
+		ASSERT_EQ(y.view(32), -12);
+		ASSERT_EQ(y.view(36), -20);
+		ASSERT_EQ(y.view(60), -20);
+		ASSERT_EQ(y.view(64), -28);
+		ASSERT_EQ(y.view(96), -28);
+		
+		x.deallocate(p2, 3);
+		x.deallocate(p4, 7);
+		x.deallocate(p3, 5);
+		x.deallocate(p1, 2);
+		
+		ASSERT_EQ(y.view(0), 92);
+		ASSERT_EQ(y.view(96), 92);
+	}
+	catch (const std::bad_alloc& e)
+	{
+		ASSERT_TRUE(false);
+	}
+}
+
+TEST(TestMyAllocator, struct)
+{	
+	try
+	{
+		//my_struct = size 32
+		Allocator<my_struct, 100> x;
+		const Allocator<my_struct, 100>& y = x;
+		
+		ASSERT_EQ(y.view(0), 92);
+		ASSERT_EQ(y.view(96), 92);
+		
+		my_struct* p1 = x.allocate(1);
+		my_struct* p2 = x.allocate(1);
+		
+		
+		
+		ASSERT_EQ(y.view(0), -32);
+		ASSERT_EQ(y.view(36), -32);
+		ASSERT_EQ(y.view(40), -52);
+		ASSERT_EQ(y.view(96), -52);
+		
+		x.deallocate(p2, 1);
+		x.deallocate(p1, 1);
+		
+		ASSERT_EQ(y.view(0), 92);
+		ASSERT_EQ(y.view(96), 92);
+	}
+	catch (const std::bad_alloc& e)
+	{
+		ASSERT_TRUE(false);
+	}
+}  
         
         
         
