@@ -15,6 +15,10 @@ TestAllocator: Allocator.h TestAllocator.c++
 TestAllocator.out: TestAllocator
 	valgrind TestAllocator        >  TestAllocator.out 2>&1
 	gcov-4.7 -b TestAllocator.c++ >> TestAllocator.out
+	
+	
+Allocator: test_allocator.c++
+	g++-4.7 -fprofile-arcs -ftest-coverage -pedantic -std=c++11 -Wall test_allocator.c++ -o Allocator -lgtest -lgtest_main -lpthread
 
 clean:
 	rm -f *.gcda
