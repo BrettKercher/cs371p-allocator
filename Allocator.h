@@ -164,7 +164,7 @@ class Allocator {
          * after allocation there must be enough space left for a valid block
          * the smallest allowable block is sizeof(T) + (2 * sizeof(int))
          * choose the first block that fits
-         * return 0, if allocation fails
+         * return 0, if allocation fails sometimes.
          */
         pointer allocate (size_type n) 
 		{
@@ -178,21 +178,44 @@ class Allocator {
             //Add a sentinel after second used sentinel of old free space - n*sizeof(T) + 8
 			
 			int old_sentinel;
-			int p = first_free(n * sizeof(T) + 2*sizeof(int));
+			int new_space;
+			int extra_space = 0;
+			int p = first_free(n * sizeof(T));
             
+			//std::cout << p << " 0" << std::endl;
+			
 			if(p < 0)
-				return 0;
+				throw(std::bad_alloc());
 			else
 			{
 				old_sentinel = view(p);
 				
-				view(p) = -(n*sizeof(T));
-				view(p+sizeof(int)+n*sizeof(T)) = -(n*sizeof(T));
+				//std::cout << old_sentinel << " 5" << std::endl;
 				
-				p = p+2*sizeof(int)+n*sizeof(T);
+				if((old_sentinel + 2*sizeof(int) - (n*sizeof(T))) < (sizeof(T) + 2*sizeof(int)))
+				{
+					extra_space = old_sentinel - n*sizeof(T);
+					//std::cout << extra_space << " 1" << std::endl;
+				}
 				
-				view(p) = old_sentinel - (n*sizeof(T) + 2*sizeof(int));
-				view(p+view(p)+sizeof(int)) = view(p);
+				new_space = n*sizeof(T) + extra_space;
+				
+				//std::cout << new_space << " 5" << std::endl;
+				
+				view(p) = -(new_space);
+				view(p+sizeof(int)+new_space) = -(new_space);
+				
+				//std::cout << p+sizeof(int)+new_space << " 9" << std::endl;
+				
+				p = p+2*sizeof(int)+new_space;
+				
+				//std::cout << p << " > " << N << std::endl;
+				
+				if(p < N)
+				{
+					view(p) = old_sentinel - (new_space + 2*sizeof(int));
+					view(p+view(p)+sizeof(int)) = view(p);
+				}
 			}
 			
             assert(valid());
