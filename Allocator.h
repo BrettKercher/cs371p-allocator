@@ -59,6 +59,32 @@ class Allocator {
         // ----
 
         char a[N];
+		
+		// -----
+        // first_free
+        // -----
+		
+		int first_free (size_type n)
+		{
+			int current_position = 0;
+			int sentinel_value = view(current_position);
+			int abs_sentinel_value = (sentinel_value < 0 ? -sentinel_value : sentinel_value);
+			
+			while(current_position < N)
+			{
+				if(sentinel_value >= (int)n)
+					return current_position;
+				
+				current_position += abs_sentinel_value + (2*sizeof(int));
+				if(current_position == N)
+					return -1;
+				
+				sentinel_value = view(current_position);
+				abs_sentinel_value = (sentinel_value < 0 ? -sentinel_value : sentinel_value);
+			}
+			
+			return -1;
+		}
 
         // -----
         // valid
@@ -109,8 +135,8 @@ class Allocator {
          * O(1) in time
          * throw a bad_alloc exception, if N is less than sizeof(T) + (2 * sizeof(int))
          */
-        Allocator () {
-            
+        Allocator () 
+		{
 			if(N < (sizeof(T) + 2*sizeof(int)) )
 				throw(std::bad_alloc());
 			
@@ -140,10 +166,27 @@ class Allocator {
          * choose the first block that fits
          * return 0, if allocation fails
          */
-        pointer allocate (size_type n) {
-            // <your code>
+        pointer allocate (size_type n) 
+		{
+            //find free block of sufficient size
+            
+            //modify the first sentinel to be -n*sizeof(T), add the second matching sentinel
+            
+            //Add a sentinel after second used sentinel of old free space - n*sizeof(T) + 8
+			
+			//int old_sentinel;
+			int p = first_free(n);
+            
+			if(p < 0)
+				return 0;
+			else
+			{
+				//old_sentinel = view(p);
+			}
+			
             assert(valid());
-            return 0;}                   // replace!
+            return 0;
+		}
 
         // ---------
         // construct
