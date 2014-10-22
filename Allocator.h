@@ -76,7 +76,7 @@ class Allocator {
 					return current_position;
 				
 				current_position += abs_sentinel_value + (2*sizeof(int));
-				if(current_position == N)
+				if(current_position >= N)
 					return -1;
 				
 				sentinel_value = view(current_position);
@@ -193,7 +193,7 @@ class Allocator {
          */
         pointer allocate (size_type n) 
 		{
-			if(n < 0)
+			if(n < 0 || n > N)
 				throw(std::bad_alloc());
 			
 			int old_sentinel;
@@ -240,7 +240,7 @@ class Allocator {
         /**
          * O(1) in space
          * O(1) in time
-         * <your documentation>
+         * Constructs Things
          */
         void construct (pointer p, const_reference v) {
             new (p) T(v);                               // this is correct and exempt
@@ -254,7 +254,7 @@ class Allocator {
          * O(1) in space
          * O(1) in time
          * after deallocation adjacent free blocks must be coalesced
-         * <your documentation>
+         * Deallocate the memory allocated by allocate
          */
         void deallocate (pointer p, size_type) 
 		{
@@ -289,7 +289,7 @@ class Allocator {
          * O(1) in space
          * O(1) in time
          * throw an invalid_argument exception, if pointer is invalid
-         * <your documentation>
+         * deconstruct the 'objects' created by construct
          */
         void destroy (pointer p) {
             p->~T();               // this is correct
@@ -298,7 +298,7 @@ class Allocator {
         /**
          * O(1) in space
          * O(1) in time
-         * <your documentation>
+         * View a[] as an int array, makes it easier to see sentinels
          */
         const int& view (int i) const {
             return *reinterpret_cast<const int*>(&a[i]);}};

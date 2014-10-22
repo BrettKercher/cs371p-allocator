@@ -145,6 +145,29 @@ TYPED_TEST(TestAllocator, test_equality)
 		ASSERT_TRUE(false);
 	}
 }
+
+TYPED_TEST(TestAllocator, test_negative_allocate)
+{
+	typedef typename TestFixture::allocator_type  allocator_type;
+    typedef typename TestFixture::value_type      value_type;
+    typedef typename TestFixture::difference_type difference_type;
+    typedef typename TestFixture::pointer         pointer;
+	
+	bool pass = false;
+	
+	try
+	{
+		allocator_type x;
+		x.allocate(-1);
+		ASSERT_TRUE(false);
+	}
+	catch (const std::bad_alloc& e)
+	{
+		pass = true;
+	}
+	
+	ASSERT_EQ(pass, true);
+}
  
 /***********************
 *						*
@@ -522,7 +545,27 @@ TEST(TestMyAllocator, struct)
 	{
 		ASSERT_TRUE(false);
 	}
-}  
+}
+
+TEST(TestMyAllocator, out_of_space)
+{	
+	bool pass = false;
+	
+	try
+	{
+		Allocator<int, 100> x;
+		
+		x.allocate(23);
+		x.allocate(1);
+
+	}
+	catch (const std::bad_alloc& e)
+	{
+		pass = true;
+	}
+	
+	ASSERT_EQ(pass,true);
+}
         
         
         
