@@ -171,12 +171,6 @@ class Allocator {
 			if(n < 0)
 				throw(std::bad_alloc());
 			
-            //find free block of sufficient size
-            
-            //modify the first sentinel to be -n*sizeof(T), add the second matching sentinel
-            
-            //Add a sentinel after second used sentinel of old free space - n*sizeof(T) + 8
-			
 			int old_sentinel;
 			int new_space;
 			int extra_space = 0;
