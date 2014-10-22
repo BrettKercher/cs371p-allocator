@@ -168,20 +168,31 @@ class Allocator {
          */
         pointer allocate (size_type n) 
 		{
+			if(n < 0)
+				throw(std::bad_alloc());
+			
             //find free block of sufficient size
             
             //modify the first sentinel to be -n*sizeof(T), add the second matching sentinel
             
             //Add a sentinel after second used sentinel of old free space - n*sizeof(T) + 8
 			
-			//int old_sentinel;
-			int p = first_free(n);
+			int old_sentinel;
+			int p = first_free(n * sizeof(T) + 2*sizeof(int));
             
 			if(p < 0)
 				return 0;
 			else
 			{
-				//old_sentinel = view(p);
+				old_sentinel = view(p);
+				
+				view(p) = -(n*sizeof(T));
+				view(p+sizeof(int)+n*sizeof(T)) = -(n*sizeof(T));
+				
+				p = p+2*sizeof(int)+n*sizeof(T);
+				
+				view(p) = old_sentinel - (n*sizeof(T) + 2*sizeof(int));
+				view(p+view(p)+sizeof(int)) = view(p);
 			}
 			
             assert(valid());
