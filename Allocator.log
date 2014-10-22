@@ -1,0 +1,77 @@
+commit 6fb7f4f72f3d7488f94ba07d530c9d95caca2d06
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Wed Oct 22 17:59:55 2014 -0500
+
+    Added documentation. closes #8
+
+commit a0bcfbd178b19d10a7d759ca04b651531a299c96
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Wed Oct 22 17:26:48 2014 -0500
+
+    Added extra tests. closes #5, closes #22
+
+commit 491c6415b0775f9d352ca2d7f91897ba046c3dfc
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Wed Oct 22 16:59:22 2014 -0500
+
+    Implemented deallocate. closes #17, closes #23
+
+commit aa65b00ce33c6237a3642df7e91410fd42395b6e
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Wed Oct 22 14:28:09 2014 -0500
+
+    Added tests for deallocate. closes #19
+
+commit 2fa7c9f60fc612b01fafd22e556b7423a284494a
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Wed Oct 22 14:11:50 2014 -0500
+
+    Fixed the issue where less than the required space was left over after alloc. closes #21
+
+commit a999b1cc35f86cb4d7d1edec89fcfb7ad2acc0e0
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Wed Oct 22 13:32:48 2014 -0500
+
+    Implemented a basic allocate function. closes #16
+
+commit db324d2b3df26c22cc445d11700a469c4da0f695
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Wed Oct 22 13:19:04 2014 -0500
+
+    Added a function to find the first free block of sufficient size. closes #20. closes #1.
+
+commit 607f517bf62e4130c8bf2bfb718d0e6426b4d868
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Wed Oct 22 12:51:22 2014 -0500
+
+    Added tests for allocate method. closes #18
+
+commit 2f2e19b3d1f8e3c99a2f8fda5c96e2d2d901a7da
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Tue Oct 21 16:26:41 2014 -0500
+
+    Implemented the valid function. closes #13
+
+commit 8abbaf10d427c5c3152b40f8297e2bfed4d9bd9e
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Tue Oct 21 16:05:32 2014 -0500
+
+    Added tests for the default constructor. closes #15
+
+commit 494abaf58c4d3064ecf727f634265216591f7001
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Tue Oct 21 14:14:28 2014 -0500
+
+    remove unnecessary files. closes #11
+
+commit 5ae69b87c3ad9c73c888d50a07c4e29d2e577068
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Tue Oct 21 14:12:49 2014 -0500
+
+    Add starting files. closes #3
+
+commit 11f83cb8c6c83c76e15e9d4b323663a3ae613c4f
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Tue Oct 21 14:02:01 2014 -0500
+
+    First Commit
