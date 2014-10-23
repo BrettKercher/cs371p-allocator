@@ -1,3 +1,27 @@
+commit a0a3985911259eefde323709b32c0b134d9d5679
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Thu Oct 23 15:15:25 2014 -0500
+
+    Removed and added some files
+
+commit b7377a73ce0a2bffa8f8635b794dd0ee2eb21e1b
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Thu Oct 23 15:14:11 2014 -0500
+
+    Fixed an allocation bug
+
+commit 4b1bb1853faf4753c28798aedbf4e21476c8d4e6
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Thu Oct 23 14:14:51 2014 -0500
+
+    Fixed invalid cases as described in @500 on piazza
+
+commit 3fb74c693d6373dd42f8a0476b2aa69aff1a8060
+Author: Brett Kercher <brettkercher@utexas.edu>
+Date:   Wed Oct 22 18:04:31 2014 -0500
+
+    Added log of commits. closes #9
+
 commit 6fb7f4f72f3d7488f94ba07d530c9d95caca2d06
 Author: Brett Kercher <brettkercher@utexas.edu>
 Date:   Wed Oct 22 17:59:55 2014 -0500
