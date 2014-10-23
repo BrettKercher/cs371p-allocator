@@ -586,27 +586,6 @@ TEST(TestMyAllocator, zero_allocate)
 	ASSERT_EQ(pass,true);
 }
 
-TEST(TestMyAllocator, invalid_deallocate_1)
-{	
-	bool pass = false;
-	
-	try
-	{
-		Allocator<int, 100> x;
-		
-		int *p = x.allocate(1);
-		
-		x.deallocate(p+1, 1);
-
-	}
-	catch (const std::invalid_argument& e)
-	{
-		pass = true;
-	}
-	
-	ASSERT_EQ(pass,true);
-}
-
 TEST(TestMyAllocator, invalid_deallocate_2)
 {	
 	bool pass = false;

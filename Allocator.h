@@ -200,6 +200,7 @@ class Allocator {
 			int new_space;
 			int extra_space = 0;
 			int p = first_free(n * sizeof(T));
+			
 			int first_element = p + sizeof(int);
 			
 			if(p < 0)
@@ -208,8 +209,7 @@ class Allocator {
 			{
 				old_sentinel = view(p);
 				
-				
-				if((old_sentinel + 2*sizeof(int) - (n*sizeof(T))) < (sizeof(T) + 2*sizeof(int)))
+				if((old_sentinel + 2*sizeof(int) - (n*sizeof(T) + 2*sizeof(int))) < (sizeof(T) + 2*sizeof(int)))
 				{
 					extra_space = old_sentinel - n*sizeof(T);
 				}
@@ -221,7 +221,7 @@ class Allocator {
 				
 				p = p+2*sizeof(int)+new_space;
 				
-				if(p < N)
+				if(p < N && old_sentinel != new_space)
 				{
 					view(p) = old_sentinel - (new_space + 2*sizeof(int));
 					view(p+view(p)+sizeof(int)) = view(p);
