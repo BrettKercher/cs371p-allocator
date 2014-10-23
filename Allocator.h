@@ -193,7 +193,7 @@ class Allocator {
          */
         pointer allocate (size_type n) 
 		{
-			if(n < 0 || n > N)
+			if(n <= 0 || n > N)
 				throw(std::bad_alloc());
 			
 			int old_sentinel;
@@ -258,21 +258,34 @@ class Allocator {
          */
         void deallocate (pointer p, size_type) 
 		{
+			if((int*)p < (int*)a || (int*)p > (int*)(a + N))
+			{
+				throw( std::invalid_argument("Invalid Pointer Argument") );
+			}
+				
+				
 			int sentinel_value_1 = (int)*(reinterpret_cast<int*>(p) - 1);
+			
+			if( reinterpret_cast<int*>(reinterpret_cast<char*>(p) + (-sentinel_value_1) ) > (int*)(a+N) || reinterpret_cast<int*>(reinterpret_cast<char*>(p) + (-sentinel_value_1) ) < (int*)(a) )
+				throw( std::invalid_argument("Invalid Pointer Argument") );
 			
 			int sentinel_value_2 = *reinterpret_cast<int*>(reinterpret_cast<char*>(p) + (-sentinel_value_1) );
 			
-			if(sentinel_value_1 == sentinel_value_2)
+			if(sentinel_value_1 == sentinel_value_2 && sentinel_value_1 < 0 && sentinel_value_2 < 0)
 			{
-				if(sentinel_value_1 < 0)
-				{
+				//if(sentinel_value_1 < 0)
+				//{
 					*(reinterpret_cast<int*>(p) - 1) *= -1;
-				}
+				//}
 				
-				if(sentinel_value_2 < 0)
-				{
+				//if(sentinel_value_2 < 0)
+				//{
 					*reinterpret_cast<int*>(reinterpret_cast<char*>(p) + (-sentinel_value_1) ) *= -1;
-				}
+				//}
+			}
+			else
+			{
+				throw( std::invalid_argument("Invalid Pointer Argument") );
 			}
 			
 			

@@ -566,7 +566,114 @@ TEST(TestMyAllocator, out_of_space)
 	
 	ASSERT_EQ(pass,true);
 }
-        
+
+TEST(TestMyAllocator, zero_allocate)
+{	
+	bool pass = false;
+	
+	try
+	{
+		Allocator<int, 100> x;
+		
+		x.allocate(0);
+
+	}
+	catch (const std::bad_alloc& e)
+	{
+		pass = true;
+	}
+	
+	ASSERT_EQ(pass,true);
+}
+
+TEST(TestMyAllocator, invalid_deallocate_1)
+{	
+	bool pass = false;
+	
+	try
+	{
+		Allocator<int, 100> x;
+		
+		int *p = x.allocate(1);
+		
+		x.deallocate(p+1, 1);
+
+	}
+	catch (const std::invalid_argument& e)
+	{
+		pass = true;
+	}
+	
+	ASSERT_EQ(pass,true);
+}
+
+TEST(TestMyAllocator, invalid_deallocate_2)
+{	
+	bool pass = false;
+	
+	try
+	{
+		Allocator<int, 100> x;
+		
+		int *p = x.allocate(1);
+		
+		x.deallocate(p+3, 1);
+
+	}
+	catch (const std::invalid_argument& e)
+	{
+		pass = true;
+	}
+	
+	ASSERT_EQ(pass,true);
+}
+
+TEST(TestMyAllocator, invalid_deallocate_3)
+{	
+	bool pass = false;
+	
+	try
+	{
+		Allocator<int, 100> x;
+		
+		int *p = x.allocate(1);
+		
+		x.deallocate(p+300, 1);
+
+	}
+	catch (const std::invalid_argument& e)
+	{
+		pass = true;
+	}
+	
+	ASSERT_EQ(pass,true);
+}
+  
+  
+TEST(TestMyAllocator, invalid_deallocate_4)
+{	
+	bool pass = false;
+	
+	try
+	{
+		Allocator<int, 100> x;
+		
+		int *p = x.allocate(1);
+		
+		*p = -400;
+		
+		//The "sentinel" behind p+1 will be -400, so when the program attempts to read the matching sentinel, 400 bytes ahead, it will dereference an area outside of a[]
+		//Should be an invalid argument exception
+		x.deallocate(p+1, 1);
+
+	}
+	catch (const std::invalid_argument& e)
+	{
+		pass = true;
+	}
+	
+	ASSERT_EQ(pass,true);
+}
         
         
         
