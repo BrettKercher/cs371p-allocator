@@ -1,0 +1,19 @@
+#include <iostream>
+#include <stdlib.h>
+#include <string>
+
+int main()
+{
+	std::allocator<int> x;
+	
+    int* b = x.allocate(100);
+	
+	x.deallocate(b, 10);
+	
+    if(b == 0) 
+		std::cout <<"this shouldnt happen" << std::endl;
+	else 
+		std::cout <<"this should happen" << std::endl;
+	
+	return 0;
+}
